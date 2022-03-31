@@ -20,7 +20,7 @@ class AnnoncesController extends Controller
         //On récupère tous les annonces
         $annonces = DB::table('annonces')->join('biens_appartements', 'annonces.bien_id', '=', 'biens_appartements.id')->get();
         
-        //On retourne les annonces
+        //On retourne les annonces à la vue
         return response()->json($annonces);
     }
 
