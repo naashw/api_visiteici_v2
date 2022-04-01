@@ -18,8 +18,8 @@ class AnnoncesFactory extends Factory
     public function definition()
     {
         return [
-            'bien_id' => Appartements::factory(),
-            'categories' => $this->faker->numberBetween(0,4), 
+            'biens_id' => Appartements::factory(),
+            'biens_type' => $this->faker->numberBetween(0,4), 
             
         ];
     }

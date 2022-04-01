@@ -22,12 +22,12 @@ class photos extends Model
 
     public function annonces ()
     {
-        return $this->belongsTo(Annonces::class, 'annonce_id');
+        return $this->belongsTo(Annonces::class, 'annonces_id');
     }
 
-    public function bien()
+    public function biens()
     {
-        return $this->belongsTo(Appartements::class, 'bien_id');
+        return $this->belongsTo(Appartements::class, 'biens_id');
     }
 
     public function user()

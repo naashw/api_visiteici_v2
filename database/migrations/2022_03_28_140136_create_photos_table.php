@@ -17,8 +17,8 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
             $table->foreignId('user_id')->constrained();
-            $table->foreignId('bien_id')->constrained();
-            $table->foreignId('annonce_id')->nullable();
+            $table->foreignId('biens_id')->constrained();
+            $table->foreignId('annonces_id')->nullable();
             $table->json('photos');
         });
     }

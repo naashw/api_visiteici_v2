@@ -16,7 +16,7 @@ class Annonces extends Model
      */
     protected $fillable = [
         'user_id',
-        'bien_id',
+        'biens_id',
         'categories',
     ];
 
@@ -27,7 +27,7 @@ class Annonces extends Model
 
     public function appartement()
     {
-        return $this->hasOne(Appartements::class, 'bien_id');
+        return $this->hasOne(Appartements::class, 'biens_id');
     }
 
     public function photos()

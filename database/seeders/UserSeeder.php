@@ -75,7 +75,7 @@ class UserSeeder extends Seeder
             ->count(rand(1,12))
             ->for($Annonce)
             ->state(['user_id' => $user->id,
-                    'bien_id' => $Annonce->bien_id,])
+                    'biens_id' => $Annonce->biens_id,])
             ->create();
     }
 }
