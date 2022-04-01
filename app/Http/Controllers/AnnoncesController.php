@@ -18,7 +18,7 @@ class AnnoncesController extends Controller
     public function index()
     {
         //On récupère tous les annonces de la table annonce
-        $annonces = DB::table('annonces')->join('biens_appartements', 'annonces.bien_id', '=', 'biens_appartements.id')->get();
+        $annonces = DB::table('annonces')->join('biens_appartements', 'annonces.biens_id', '=', 'biens_appartements.id')->get();
         
         //On retourne les annonces à la vue
         return response()->json($annonces);
