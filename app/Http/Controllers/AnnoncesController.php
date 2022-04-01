@@ -17,8 +17,19 @@ class AnnoncesController extends Controller
      */
     public function index()
     {
+
+        $photos = DB::table('photos')->select('biens_id', DB::raw( "JSON_ARRAYAGG(photos) photos " ))
+                ->groupBy('annonces_id');
+                
+
         //On récupère tous les annonces de la table annonce
-        $annonces = DB::table('annonces')->join('biens_appartements', 'annonces.biens_id', '=', 'biens_appartements.id')->get();
+        $annonces = DB::table('annonces')
+        ->join('biens_appartements', 'annonces.biens_id', '=', 'biens_appartements.id')
+        ->joinSub($photos, 'photos', function ($join) {
+            $join->on('annonces.biens_id', '=', 'photos.biens_id')->select('photos.photos');
+        }) 
+        ->get();
+
         
         //On retourne les annonces à la vue
         return response()->json($annonces);
