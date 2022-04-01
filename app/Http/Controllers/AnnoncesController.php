@@ -18,7 +18,7 @@ class AnnoncesController extends Controller
     public function index()
     {
 
-        $photos = DB::table('photos')->select('biens_id', DB::raw( "JSON_ARRAY(GROUP_CONCAT( photos)) photos " ))
+        $photos = DB::table('photos')->select('biens_id', DB::raw( "GROUP_CONCAT(photos) photos " ))
                 ->groupBy('annonces_id');
                 
 
