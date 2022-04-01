@@ -18,7 +18,7 @@ class AnnoncesController extends Controller
     public function index()
     {
 
-        $photos = DB::table('photos')->select('biens_id', DB::raw( "GROUP_CONCAT(JSON_ARRAY(id, photos)) photos " ))
+        $photos = DB::table('photos')->select('biens_id', DB::raw( "JSON_ARRAY(GROUP_CONCAT( photos)) photos " ))
                 ->groupBy('annonces_id');
                 
 
@@ -26,7 +26,7 @@ class AnnoncesController extends Controller
         $annonces = DB::table('annonces')
         ->join('biens_appartements', 'annonces.biens_id', '=', 'biens_appartements.id')
         ->joinSub($photos, 'photos', function ($join) {
-            $join->on('annonces.biens_id', '=', 'photos.biens_id')->select('photos.photos');
+            $join->on('annonces.biens_id', '=', 'photos.biens_id');
         }) 
         ->get();
 

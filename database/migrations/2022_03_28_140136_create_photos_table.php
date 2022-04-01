@@ -19,7 +19,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained();
             $table->foreignId('biens_id');
             $table->foreignId('annonces_id')->nullable();
-            $table->json('photos');
+            $table->string('photos');
         });
     }
 

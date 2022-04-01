@@ -25,7 +25,7 @@ class photosFactory extends Factory
     public function definition()
     {
         return [
-            'photos' => json_encode($this->faker->imageUrl()),
+            'photos' => $this->faker->imageUrl(),
         ];
     }
 }
