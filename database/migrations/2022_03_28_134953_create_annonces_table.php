@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
             $table->foreignId('user_id')->constrained();
-            $table->foreignId('biens_id')->constrained();
+            $table->foreignId('biens_id');
             $table->tinyInteger('biens_type');
         });
     }
