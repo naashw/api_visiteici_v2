@@ -9,6 +9,7 @@ use App\Models\UserPublic;
 use App\Models\Annonces;
 use App\Models\photos;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\App;
 
 
 class UserSeeder extends Seeder
@@ -18,15 +19,18 @@ class UserSeeder extends Seeder
      *
      * @return void
      */
+
+
     public function run()
     {
-        
+        $nb_to_create = App::environment() == 'dev' ? 2 : 100;
+
         $users = User::factory()
                 ->hasUser_Public(1, 
                     function (array $attributes, User $user) {
                     return ['name_public' => $user->name, 'email_public' => $user->email];
                     })
-                ->count(1)->create();
+                ->count($nb_to_create)->create();
          
 
         foreach($users as $user)
