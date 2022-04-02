@@ -22,7 +22,7 @@ class AnnoncesController extends Controller
                 ->groupBy('annonces_id');
                 
 
-        //On récupère tous les annonces de la table annonce
+        //On récupère tous les annonces de la table annonces
         $annonces = DB::table('annonces')
         ->join('biens_appartements', 'annonces.biens_id', '=', 'biens_appartements.id')
         ->joinSub($photos, 'photos', function ($join) {
