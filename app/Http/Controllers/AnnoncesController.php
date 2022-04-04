@@ -59,12 +59,27 @@ class AnnoncesController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\annonces  $annonces
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(annonces $annonces)
+    public function show($id)
     {
-        //
+        //dd($annonces = DB::table('annonces')->where('id','=',$id)->get() );
+
+        $photos = DB::table('photos')->select('biens_id', DB::raw( "GROUP_CONCAT(photos) photos " ))
+                ->groupBy('annonces_id');
+ 
+        //On récupère tous les annonces de la table annonces
+        $annonces = DB::table('annonces')
+        ->where('annonces.id', '=', $id)
+        ->join('biens_appartements', 'annonces.biens_id', '=', 'biens_appartements.id')
+        ->joinSub($photos, 'photos', function ($join) {
+            $join->on('annonces.biens_id', '=', 'photos.biens_id');
+        }) 
+        ->get();
+
+        return response()->json($annonces);
+
     }
 
     /**
