@@ -15,23 +15,26 @@ class AnnoncesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(request $request)
     {
+        //dd( $request->input("text") ? true : false );
 
         $photos = DB::table('photos')->select('biens_id', DB::raw( "GROUP_CONCAT(photos) photos " ))
                 ->groupBy('annonces_id');
                 
-
         //On récupère tous les annonces de la table annonces
         $annonces = DB::table('annonces')
         ->join('biens_appartements', 'annonces.biens_id', '=', 'biens_appartements.id')
         ->joinSub($photos, 'photos', function ($join) {
             $join->on('annonces.biens_id', '=', 'photos.biens_id');
         })
-        ->orderBy('annonces.id', 'desc') 
-        ->get();
-
+        ->orderBy('annonces.id', 'desc');
         
+        //On filtre les annonces en fonction des critères de recherche si il y en à une
+        $request->input("text") ? $annonces = $annonces->where('biens_appartements.nom', 'like', '%'.$request->input("text").'%') : '';
+        
+        $annonces = $annonces->get();
+
         //On retourne les annonces à la vue
         return response()->json($annonces);
     }
