@@ -27,7 +27,8 @@ class AnnoncesController extends Controller
         ->join('biens_appartements', 'annonces.biens_id', '=', 'biens_appartements.id')
         ->joinSub($photos, 'photos', function ($join) {
             $join->on('annonces.biens_id', '=', 'photos.biens_id');
-        }) 
+        })
+        ->orderBy('annonces.id', 'desc') 
         ->get();
 
         
