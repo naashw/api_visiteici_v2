@@ -31,6 +31,9 @@ class AnnoncesController extends Controller
         //On filtre les annonces en fonction des critères de recherche si il y en à une
         $request->input("text") ? $annonces = $annonces->where('biens_appartements.nom', 'like', '%' . $request->input("text") . '%') : '';
 
+        //On filtre les annonces par nombres voulu dans la requete
+        $request->input("nb") ? $annonces = $annonces->take($request->input("nb")) : '';
+        
         $annonces = $annonces->get();
 
         //On retourne les annonces à la vue
