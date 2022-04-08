@@ -19,7 +19,7 @@ return [
 
     'allowed_methods' => ['*'],
 
-    //'allowed_origins' => [env('FRONTEND_URL')],
+    // allow all origins to call api
     'allowed_origins' => ['*'],
 
     'allowed_origins_patterns' => [],
