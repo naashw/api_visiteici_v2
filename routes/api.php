@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\AnnoncesController;
+use App\Http\Controllers\AppartementsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,3 +22,5 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 });
 
 Route::apiResource("annonces", AnnoncesController::class);
+Route::middleware(['auth:sanctum'])->apiResource("appartements", AppartementsController::class);
+//Route::apiResource("appartements", AppartementsController::class);

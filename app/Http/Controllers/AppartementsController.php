@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\appartements;
+use App\Models\annonces;
 use Illuminate\Http\Request;
+use App\Http\Requests\StoreAppartementRequest;
+use App\Http\Controllers\Auth;
 
 class AppartementsController extends Controller
 {
@@ -15,6 +18,7 @@ class AppartementsController extends Controller
     public function index()
     {
         //
+        return appartements::all();
     }
 
     /**
@@ -30,12 +34,52 @@ class AppartementsController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\StoreAppartementRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreAppartementRequest $request)
     {
-        //
+        //  appartements::create($request->all());
+
+        // create validation rules for the request data
+        $request->validated();
+      
+        $appartements = appartements::create([
+            'categories' => $request->categories,
+            'nom' => $request->nom,
+            'description' => $request->description,
+            'code_postal' => $request->code_postal,
+            'ville' => $request->ville,
+            'adresse' => $request->adresse,
+            'prix' => $request->prix,
+            'charges_comprises' => $request->charges_comprises,
+            'meublé' => $request->meublé,
+            'surface' => $request->surface,
+            'nb_pieces' => $request->nb_pieces,
+            'nb_chambres' => $request->nb_chambres,
+            'fibre_optique' => $request->fibre_optique,
+            'balcon' => $request->balcon,
+            'terrasse' => $request->terrasse,
+            'terrasse_surface' => $request->terrasse_surface,
+            'cave' => $request->cave,
+            'jardin' => $request->jardin,
+            'jardin_surface' => $request->jardin_surface,
+            'parking' => $request->parking,
+            'garage' => $request->garage,
+            'ascenseur' => $request->ascenseur,
+            'classe_energie' => $request->classe_energie,
+            'GES' => $request->GES,
+        ]);
+
+        $annonces = annonces::create([
+            'user_id' => $request->user()->id,
+            'biens_id' => $appartements->id,
+            'biens_type' => $appartements->categories,
+        ]);
+
+
+
+        return "appartement created";
     }
 
     /**
