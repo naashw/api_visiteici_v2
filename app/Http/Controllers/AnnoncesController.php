@@ -20,9 +20,14 @@ class AnnoncesController extends Controller
         $photos = DB::table('photos')->select('biens_id', DB::raw("GROUP_CONCAT(photos) photos "))
             ->groupBy('annonces_id');
 
+        $appartements = DB::table('biens_appartements')->select('id as biens_id, *');
+
         //On récupère tous les annonces de la table annonces
         $annonces = DB::table('annonces')
-            ->join('biens_appartements', 'annonces.biens_id', '=', 'biens_appartements.id')
+            //->join('biens_appartements', 'annonces.biens_id', '=', 'biens_appartements.id')
+            ->joinSub($appartements, 'biens_appartements', function ($join) {
+                $join->on('annonces.biens_id', '=', 'biens_id');
+            })
             ->joinSub($photos, 'photos', function ($join) {
                 $join->on('annonces.biens_id', '=', 'photos.biens_id');
             })
@@ -31,9 +36,11 @@ class AnnoncesController extends Controller
         //On filtre les annonces en fonction des critères de recherche si il y en à une
         $request->input("text") ? $annonces = $annonces->where('biens_appartements.nom', 'like', '%' . $request->input("text") . '%') : '';
 
+        $request->input("userId") ? $annonces = $annonces->where('annonces.user_id', '=', $request->input("userId")) : '';
+
         //On filtre les annonces par nombres voulu dans la requete
         $request->input("nb") ? $annonces = $annonces->take($request->input("nb")) : '';
-        
+
         $annonces = $annonces->get();
 
         //On retourne les annonces à la vue
@@ -84,7 +91,6 @@ class AnnoncesController extends Controller
             ->get();
 
         return response()->json($annonces);
-
     }
 
     /**

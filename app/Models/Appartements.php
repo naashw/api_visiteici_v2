@@ -12,6 +12,15 @@ class Appartements extends Model
     protected $table = 'biens_appartements';
 
     /**
+     * The attributes that should be hidden for arrays.
+     */
+    protected $hidden = [
+        'id',
+        'created_at',
+        'updated_at',
+    ];
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string, boolean>
