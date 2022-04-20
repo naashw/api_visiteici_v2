@@ -25,7 +25,7 @@ class photosFactory extends Factory
     public function definition()
     {
         return [
-            'photos' => $this->faker->imageUrl(),
+            'photos' => "https://api.lorem.space/image/house?w=".$this->faker->numberBetween(150,2000)."&h=".$this->faker->numberBetween(150,2000),
         ];
     }
 }
