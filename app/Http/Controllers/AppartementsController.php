@@ -6,7 +6,7 @@ use App\Models\appartements;
 use App\Models\annonces;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreAppartementRequest;
-use App\Http\Controllers\Auth;
+use App\Models\photos;
 
 class AppartementsController extends Controller
 {
@@ -40,6 +40,7 @@ class AppartementsController extends Controller
     public function store(StoreAppartementRequest $request)
     {
         //  appartements::create($request->all());
+
 
         // create validation rules for the request data
         $request->validated();
@@ -77,9 +78,20 @@ class AppartementsController extends Controller
             'biens_type' => $appartements->categories,
         ]);
 
+        photos::create([
+            'user_id' => $request->user()->id,
+            'biens_id' => $annonces->id,
+            'annonces_id' => $appartements->id,
+            'photos' => "https://via.placeholder.com/500",
+        ]);
 
 
-        return "appartement created";
+
+
+        return response()->json([
+            'id' => $annonces->id,
+            'state' => 'annonce crée avec succès',
+        ]);
     }
 
     /**

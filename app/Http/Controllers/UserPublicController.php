@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\UserPublic;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class UserPublicController extends Controller
 {
@@ -42,11 +43,25 @@ class UserPublicController extends Controller
      * Display the specified resource.
      *
      * @param  \App\Models\UserPublic  $userPublic
+     * * @param  \App\Models\Users  $users
      * @return \Illuminate\Http\Response
      */
-    public function show(UserPublic $userPublic)
+    public function show($id)
     {
-        //
+
+            $userPublic = UserPublic::where('user_id', '=', $id)
+            ->get();
+
+           
+            if( sizeof($userPublic) == 0 ) { 
+                $userPublic = DB::table('users')
+                ->where('users.id', '=', $id)
+                ->select('users.name as name_public')
+                ->get();
+            }
+            
+
+        return response()->json($userPublic[0]); 
     }
 
     /**

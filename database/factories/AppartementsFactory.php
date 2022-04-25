@@ -19,7 +19,7 @@ class AppartementsFactory extends Factory
         return [
             'categories' => $this->faker->numberBetween(1,2),
             'nom' => $this->faker->sentence(),
-            'description' => $this->faker->paragraph(),
+            'description' => $this->faker->paragraphs(8,true),
             'code_postal' => $this->faker->randomNumber(5,false),
             'ville' => $this->faker->city(),
             'adresse' => $this->faker->address(),
