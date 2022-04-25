@@ -49,19 +49,19 @@ class UserPublicController extends Controller
     public function show($id)
     {
 
-            $userPublic = UserPublic::where('user_id', '=', $id)
+        $userPublic = UserPublic::where('user_id', '=', $id)
             ->get();
 
-           
-            if( sizeof($userPublic) == 0 ) { 
-                $userPublic = DB::table('users')
+
+        if (sizeof($userPublic) == 0) {
+            $userPublic = DB::table('users')
                 ->where('users.id', '=', $id)
                 ->select('users.name as name_public')
                 ->get();
-            }
-            
+        }
 
-        return response()->json($userPublic[0]); 
+
+        return response()->json($userPublic[0]);
     }
 
     /**
