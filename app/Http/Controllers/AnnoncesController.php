@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\showAnnonceRequest;
 use App\Models\annonces;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -74,25 +75,30 @@ class AnnoncesController extends Controller
      * Display the specified resource.
      *
      * @param  int  $id
+     * @param  \App\Models\annonces  $annonces
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($id, annonces $annonces)
     {
+        //On vérifie si il exists avant de continuer
+        if ($annonces->where('id', $id)->exists()) {
+            //On récupère les url des photos de la table photos
+            $photos = DB::table('photos')->select('biens_id', DB::raw("GROUP_CONCAT(photos) photos "))
+                ->groupBy('annonces_id');
 
-        //On récupère les url des photos de la table photos
-        $photos = DB::table('photos')->select('biens_id', DB::raw("GROUP_CONCAT(photos) photos "))
-            ->groupBy('annonces_id');
+            //On récupère tous les annonces de la table annonces
+            $annonces = DB::table('annonces')
+                ->where('annonces.id', '=', $id)
+                ->leftJoin('biens_appartements', 'annonces.biens_id', '=', 'biens_appartements.id')
+                ->leftJoinSub($photos, 'photos', function ($join) {
+                    $join->on('annonces.biens_id', '=', 'photos.biens_id');
+                })
+                ->get();
 
-        //On récupère tous les annonces de la table annonces
-        $annonces = DB::table('annonces')
-            ->where('annonces.id', '=', $id)
-            ->leftJoin('biens_appartements', 'annonces.biens_id', '=', 'biens_appartements.id')
-            ->leftJoinSub($photos, 'photos', function ($join) {
-                $join->on('annonces.biens_id', '=', 'photos.biens_id');
-            })
-            ->get();
-
-        return response()->json($annonces);
+            return response()->json($annonces);
+        } else {
+            return response()->json(['error' => 'Annonce introuvable']);
+        }
     }
 
     /**
