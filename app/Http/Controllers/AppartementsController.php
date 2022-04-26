@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use App\Http\Requests\StoreAppartementRequest;
 use App\Models\photos;
 
+use Illuminate\Support\Facades\Storage;
+
 class AppartementsController extends Controller
 {
     /**
@@ -40,11 +42,14 @@ class AppartementsController extends Controller
     public function store(StoreAppartementRequest $request)
     {
         //  appartements::create($request->all());
-
-
+        
         // create validation rules for the request data
         $request->validated();
-      
+
+        if(isset($request->images)){
+            Storage::disk('public')->put('photos',$request->images);
+        }
+        
         $appartements = appartements::create([
             'categories' => $request->categories,
             'nom' => $request->nom,
