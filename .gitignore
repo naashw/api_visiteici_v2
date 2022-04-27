@@ -13,3 +13,8 @@ npm-debug.log
 yarn-error.log
 /.idea
 /.vscode
+test-results/
+playwright-report/
+playwright.config.js
+e2e/
+e2e/*

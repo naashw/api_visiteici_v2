@@ -48,7 +48,8 @@ class StoreAppartementRequest extends FormRequest
             'ascenseur' => 'required|boolean',
             'classe_energie' => 'required|numeric|between:0,254',
             'GES' => 'required|numeric|between:0,254',
-            'photos' => 'file',
+            'photos' => '',
+            'photos.' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ];
     }
 }

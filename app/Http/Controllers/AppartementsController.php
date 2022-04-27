@@ -39,64 +39,66 @@ class AppartementsController extends Controller
      * @param  \App\Http\Requests\StoreAppartementRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreAppartementRequest $request)
+    public function store(StoreAppartementRequest $req)
     {
-        //  appartements::create($request->all());
-        
-        // create validation rules for the request data
-        $request->validated();
-
-        if(isset($request->images)){
-            Storage::disk('public')->put('photos',$request->images);
-        }
+      
+        $request = $req->validated();      
         
         $appartements = appartements::create([
-            'categories' => $request->categories,
-            'nom' => $request->nom,
-            'description' => $request->description,
-            'code_postal' => $request->code_postal,
-            'ville' => $request->ville,
-            'adresse' => $request->adresse,
-            'prix' => $request->prix,
-            'charges_comprises' => $request->charges_comprises,
-            'meublé' => $request->meublé,
-            'surface' => $request->surface,
-            'nb_pieces' => $request->nb_pieces,
-            'nb_chambres' => $request->nb_chambres,
-            'fibre_optique' => $request->fibre_optique,
-            'balcon' => $request->balcon,
-            'terrasse' => $request->terrasse,
-            'terrasse_surface' => $request->terrasse_surface,
-            'cave' => $request->cave,
-            'jardin' => $request->jardin,
-            'jardin_surface' => $request->jardin_surface,
-            'parking' => $request->parking,
-            'garage' => $request->garage,
-            'ascenseur' => $request->ascenseur,
-            'classe_energie' => $request->classe_energie,
-            'GES' => $request->GES,
+            'categories' => $request['categories'],
+            'nom' => $request['nom'],
+            'description' => $request['description'],
+            'code_postal' => $request['code_postal'],
+            'ville' => $request['ville'],
+            'adresse' => $request['adresse'],
+            'prix' => $request['prix'],
+            'charges_comprises' => $request['charges_comprises'],
+            'meublé' => $request['meublé'],
+            'surface' => $request['surface'],
+            'nb_pieces' => $request['nb_pieces'],
+            'nb_chambres' => $request['nb_chambres'],
+            'fibre_optique' => $request['fibre_optique'],
+            'balcon' => $request['balcon'],
+            'terrasse' => $request['terrasse'],
+            'terrasse_surface' => $request['terrasse_surface']?? "",
+            'cave' => $request['cave'],
+            'jardin' => $request['jardin'],
+            'jardin_surface' => $request['jardin_surface']?? "",
+            'parking' => $request['parking'],
+            'garage' => $request['garage'],
+            'ascenseur' => $request['ascenseur'],
+            'classe_energie' => $request['classe_energie'],
+            'GES' => $request['GES'],
         ]);
-
+        
         $annonces = annonces::create([
-            'user_id' => $request->user()->id,
+            'user_id' => $req->user()->id,
             'biens_id' => $appartements->id,
             'biens_type' => $appartements->categories,
-        ]);
-
-        photos::create([
-            'user_id' => $request->user()->id,
-            'biens_id' => $annonces->id,
-            'annonces_id' => $appartements->id,
-            'photos' => "https://via.placeholder.com/500",
-        ]);
-
-
-
+        ]);        
+        
+        $files = $request['photos'];
+        
+        if($files)
+        {
+            foreach($files as $file)
+            {
+                $fileUploaded = Storage::disk('public')->put('photos',$file);
+                $url = Storage::url($fileUploaded);
+                
+                photos::create([
+                    'user_id' => $req->user()->id,
+                    'biens_id' => $appartements->id,
+                    'annonces_id' => $annonces->id,
+                    'photos' => asset($url),
+                ]);
+            }
+        }
 
         return response()->json([
             'id' => $annonces->id,
             'state' => 'annonce crée avec succès',
-        ]);
+        ]); 
     }
 
     /**
