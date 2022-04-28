@@ -42,7 +42,7 @@ class AppartementsController extends Controller
     public function store(StoreAppartementRequest $req)
     {
       
-        $request = $req->validated();      
+        $request = $req->validated();
         
         $appartements = appartements::create([
             'categories' => $request['categories'],
