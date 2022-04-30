@@ -75,7 +75,7 @@ class AnnoncesController extends Controller
      * Display the specified resource.
      *
      * @param  int  $id
-     * @param  \App\Models\annonces  $annonces
+     * @param  \App\Models\Annonces  $annonces
      * @return \Illuminate\Http\Response
      */
     public function show($id, annonces $annonces)
