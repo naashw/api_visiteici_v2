@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\showAnnonceRequest;
-use App\Models\annonces;
+use App\Models\Annonces;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -78,7 +78,7 @@ class AnnoncesController extends Controller
      * @param  \App\Models\Annonces  $annonces
      * @return \Illuminate\Http\Response
      */
-    public function show($id, annonces $annonces)
+    public function show($id, Annonces $annonces)
     {
         //On vérifie si il exists avant de continuer
         if ($annonces->where('id', $id)->exists()) {
