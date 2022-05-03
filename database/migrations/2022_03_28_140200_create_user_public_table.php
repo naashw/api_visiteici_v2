@@ -17,10 +17,10 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
             $table->foreignId('user_id')->constrained();
-            $table->string('name_public');
-            $table->string('email_public')->unique();
-            $table->char('telephone_public',20)->nullable()->unique();
-            $table->string('ville_public');
+            $table->string('name_public')->unique()->nullable();
+            $table->string('email_public')->unique()->nullable();
+            $table->char('telephone_public',20)->unique()->nullable();
+            $table->string('ville_public')->nullable();
             $table->string('nom_societe_public')->nullable();
             $table->string('url_website_societe_public')->nullable();
         });

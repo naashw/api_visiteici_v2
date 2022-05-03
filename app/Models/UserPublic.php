@@ -20,6 +20,7 @@ class UserPublic extends Model
     protected $hidden = [
         'created_at',
         'updated_at',
+        'id',
     ];
 
     /**
@@ -28,6 +29,7 @@ class UserPublic extends Model
      * @var array<int, string>
      */
     protected $fillable = [
+        'user_id',
         'name_public',
         'email_public',
         'telephone_public',

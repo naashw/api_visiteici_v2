@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\UserPublic;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class UserPublicController extends Controller
 {
@@ -36,7 +37,32 @@ class UserPublicController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // $request = $request->validated();
+
+
+        if (!Auth::check()) {
+            return "Dommage, vous n'êtes pas connecté";
+        }
+
+        $userPublic = UserPublic::updateOrCreate(
+            [
+                'user_id' => Auth::id()
+            ],
+            [
+                'name_public' => $request['name_public'],
+                'email_public' => $request['email_public'],
+                'telephone_public' => $request['telephone_public'],
+                'ville_public' => $request['ville_public'],
+                'nom_societe_public' => $request['nom_societe_public'],
+                'url_website_societe_public' => $request['url_website_societe_public'],
+            ]
+        );
+
+
+        return response()->json([
+            'user' => $userPublic,
+            'state' => 'Profil public crée avec succès',
+        ]);
     }
 
     /**
