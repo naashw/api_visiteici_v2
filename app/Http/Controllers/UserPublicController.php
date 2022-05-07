@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\UserPublic;
 use Illuminate\Http\Request;
+use App\Http\Requests\UpdateUserPublicRequest;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
@@ -32,13 +33,12 @@ class UserPublicController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\UpdateUserPublicRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(UpdateUserPublicRequest $request)
     {
-        // $request = $request->validated();
-
+ 
 
         if (!Auth::check()) {
             return "Dommage, vous n'êtes pas connecté";
@@ -74,20 +74,20 @@ class UserPublicController extends Controller
      */
     public function show($id)
     {
+        if (UserPublic::where('user_id', '=', $id)->exists()) {
+            $userPublic = UserPublic::where('user_id', '=', $id)->first();
 
-        $userPublic = UserPublic::where('user_id', '=', $id)
-            ->get();
-
-
-        if (sizeof($userPublic) == 0) {
-            $userPublic = DB::table('users')
-                ->where('users.id', '=', $id)
-                ->select('users.name as name_public')
-                ->get();
+            return response()->json([
+                'user' => $userPublic,
+                'state' => 'Profil public trouvé',
+                'finded' => true,
+            ]);
+        } else {
+            return response()->json([
+                'state' => 'Profil public non trouvé',
+                'finded' => false,
+            ]);
         }
-
-
-        return response()->json($userPublic[0]);
     }
 
     /**

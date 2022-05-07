@@ -32,6 +32,7 @@ class UserPublicFactory extends Factory
             'ville_public' => $this->faker->city(),
             'nom_societe_public' => $this->faker->word(),
             'url_website_societe_public' => $this->faker->url(),
+            'photo_public' => $this->faker->imageUrl(360,360,'photo de profil'),
         ];
     }
 }

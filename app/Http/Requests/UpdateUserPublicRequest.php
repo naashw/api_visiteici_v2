@@ -3,6 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 class UpdateUserPublicRequest extends FormRequest
 {
@@ -13,7 +15,7 @@ class UpdateUserPublicRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return Auth::check();
     }
 
     /**
@@ -24,13 +26,21 @@ class UpdateUserPublicRequest extends FormRequest
     public function rules()
     {
         return [
-            'user_id' => 'numeric',
-            'name_public' => 'required|string|max:190',
-            'email_public' => 'required|string',
-            'telephone_public' => 'numeric|digits:10',
-            'ville_public' => 'string|max:190',
-            'nom_societe_public' => 'string|max:190',
-            'url_website_societe_public' => 'string|max:190',
+            'name_public' => [
+                'required',
+                Rule::unique('users','name')->ignore(Auth::id()),
+                Rule::unique('user_public','name_public')->ignore(Auth::id(),'user_id')
+            ],
+            'email_public' => [
+                'email:rfc,dns',
+                'nullable',
+                Rule::unique('users','email')->ignore(Auth::id()),
+                Rule::unique('user_public','email_public')->ignore(Auth::id(),'user_id')
+            ],
+            'telephone_public' => 'numeric|digits:10|nullable',
+            'ville_public' => 'string|max:190|nullable',
+            'nom_societe_public' => 'string|max:190|nullable',
+            'url_website_societe_public' => 'string|max:190|nullable',
         ];
     }
 }

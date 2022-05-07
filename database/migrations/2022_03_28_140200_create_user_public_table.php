@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('ville_public')->nullable();
             $table->string('nom_societe_public')->nullable();
             $table->string('url_website_societe_public')->nullable();
+            $table->string('photo_public')->nullable();
         });
     }
 

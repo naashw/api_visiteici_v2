@@ -17,7 +17,7 @@ class AnnoncesController extends Controller
      */
     public function index(request $request)
     {
-        $nombresAnnoncesParPage = 5;
+        $nombresAnnoncesParPage = 25;
         //On récupère les url des photos de la table photos
         $photos = DB::table('photos')->select('biens_id', DB::raw("GROUP_CONCAT(photos) photos "))
             ->groupBy('annonces_id');
