@@ -36,6 +36,7 @@ class UserPublic extends Model
         'ville_public',
         'nom_societe_public',
         'url_website_societe_public',
+        'photo_public',
     ];
 
     public function user()

@@ -41,6 +41,7 @@ class UpdateUserPublicRequest extends FormRequest
             'ville_public' => 'string|max:190|nullable',
             'nom_societe_public' => 'string|max:190|nullable',
             'url_website_societe_public' => 'string|max:190|nullable',
+            'photo_public' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ];
     }
 }

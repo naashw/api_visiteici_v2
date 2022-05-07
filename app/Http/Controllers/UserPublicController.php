@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\UserPublic;
 use Illuminate\Http\Request;
 use App\Http\Requests\UpdateUserPublicRequest;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
@@ -38,10 +39,27 @@ class UserPublicController extends Controller
      */
     public function store(UpdateUserPublicRequest $request)
     {
- 
+
 
         if (!Auth::check()) {
             return "Dommage, vous n'êtes pas connecté";
+        }
+
+        $fileUrl = null;
+        $file = $request['photo_public'];
+
+        if (isset($file)) {
+
+            $fileUploaded = Storage::disk('public')->put('photo', $file);
+            $fileUrl = Storage::url($fileUploaded);
+            $userPublic = UserPublic::updateOrCreate(
+                [
+                    'user_id' => Auth::id()
+                ],
+                [
+                    'photo_public' => asset($fileUrl),
+                ]
+            );
         }
 
         $userPublic = UserPublic::updateOrCreate(
@@ -58,10 +76,9 @@ class UserPublicController extends Controller
             ]
         );
 
-
         return response()->json([
             'user' => $userPublic,
-            'state' => 'Profil public crée avec succès',
+            'state' => 'Profil public mis à jour avec succès',
         ]);
     }
 
