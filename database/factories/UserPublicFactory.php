@@ -26,8 +26,8 @@ class UserPublicFactory extends Factory
     public function definition()
     {
         return [
-            'name_public' => $this->faker->name(),
-            'email_public' => $this->faker->email(),
+            'name_public' => $this->faker->unique()->name(),
+            'email_public' => $this->faker->unique()->email(),
             'telephone_public' => $this->faker->phoneNumber(),
             'ville_public' => $this->faker->city(),
             'nom_societe_public' => $this->faker->word(),

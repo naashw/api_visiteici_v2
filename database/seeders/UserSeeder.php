@@ -23,7 +23,7 @@ class UserSeeder extends Seeder
 
     public function run()
     {
-        $nb_to_create = App::environment() == 'local' ? 10 : 100;
+        $nb_to_create = App::environment() == 'local' ? 2 : 100;
 
         $users = User::factory()
             ->hasUser_Public(
