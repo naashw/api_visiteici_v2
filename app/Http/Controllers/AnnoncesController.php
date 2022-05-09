@@ -2,14 +2,26 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\showAnnonceRequest;
+use App\Http\Requests\showAnnoncesRequest;
+use App\Interfaces\AnnoncesRepositoryInterface;
 use App\Models\Annonces;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use App\Repositories\AnnoncesRepository;
+use App\Providers\RepositoryServiceProvider;
+use Exception;
+use Illuminate\Http\JsonResponse;
 
 class AnnoncesController extends Controller
 {
+    private AnnoncesRepositoryInterface $AnnoncesRepository;
+
+    public function __construct(AnnoncesRepositoryInterface $AnnoncesRepository) 
+    {
+        $this->AnnoncesRepository = $AnnoncesRepository;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -17,36 +29,7 @@ class AnnoncesController extends Controller
      */
     public function index(request $request)
     {
-        $nombresAnnoncesParPage = 25;
-        //On récupère les url des photos de la table photos
-        $photos = DB::table('photos')->select('biens_id', DB::raw("GROUP_CONCAT(photos) photos "))
-            ->groupBy('annonces_id');
-
-        // On récupère toutes les appartements de la table annonces
-        $appartements = DB::table('biens_appartements')->select('*', 'id as app_id');
-
-        // On join les appartements et les photos avec la table annonces
-        $annonces = DB::table('annonces')
-            ->leftJoinSub($appartements, 'biens_appartements', function ($join) {
-                $join->on('annonces.biens_id', '=', 'biens_appartements.app_id');
-            })
-            ->leftjoinSub($photos, 'photos', function ($join) {
-                $join->on('annonces.biens_id', '=', 'photos.biens_id');
-            })
-            ->select('photos.photos', 'biens_appartements.*', 'annonces.*')
-            ->orderBy('annonces.id', 'desc');
-
-
-        //On filtre les annonces en fonction des critères de recherche si il y en à.
-        $request->input("text") ? $annonces = $annonces->where('biens_appartements.nom', 'like', '%' . $request->input("text") . '%') : '';
-        $request->input("userId") ? $annonces = $annonces->where('annonces.user_id', '=', $request->input("userId")) : 'rien trouvé';
-        $request->input("page") ? $annonces = $annonces->skip($request->input("page")) : '';
-        $request->input("nb") ? $annonces = $annonces->take($request->input("nb")) : $annonces = $annonces->take($nombresAnnoncesParPage);
-
-        
-
-        //On retourne les annonces à la vue
-        return response()->json($annonces->get());
+        return response()->json($this->AnnoncesRepository->getAnnoncesByParams($request->all()));
     }
 
     /**
@@ -74,39 +57,20 @@ class AnnoncesController extends Controller
      * Display the specified resource.
      *
      * @param  int  $id
-     * @param  \App\Models\Annonces  $annonces
      * @return \Illuminate\Http\Response
      */
-    public function show($id, Annonces $annonces)
+    public function show($id) : JsonResponse
     {
-        //On vérifie si il exists avant de continuer
-        if ($annonces->where('id', $id)->exists()) {
-            //On récupère les url des photos de la table photos
-            $photos = DB::table('photos')->select('biens_id', DB::raw("GROUP_CONCAT(photos) photos "))
-                ->groupBy('annonces_id');
-
-            //On récupère tous les annonces de la table annonces
-            $annonces = DB::table('annonces')
-                ->where('annonces.id', '=', $id)
-                ->leftJoin('biens_appartements', 'annonces.biens_id', '=', 'biens_appartements.id')
-                ->leftJoinSub($photos, 'photos', function ($join) {
-                    $join->on('annonces.biens_id', '=', 'photos.biens_id');
-                })
-                ->get();
-
-            return response()->json($annonces);
-        } else {
-            return response()->json(['error' => 'Annonce introuvable']);
-        }
+        return response()->json($this->AnnoncesRepository->getAnnonceById($id));
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\annonces  $annonces
+     * @param  \App\Models\Annonces  $annonces
      * @return \Illuminate\Http\Response
      */
-    public function edit(annonces $annonces)
+    public function edit(Annonces $annonces)
     {
         //
     }
@@ -115,10 +79,10 @@ class AnnoncesController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\annonces  $annonces
+     * @param  \App\Models\Annonces  $annonces
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, annonces $annonces)
+    public function update(Request $request, Annonces $annonces)
     {
         //
     }
@@ -126,10 +90,10 @@ class AnnoncesController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\annonces  $annonces
+     * @param  \App\Models\Annonces  $annonces
      * @return \Illuminate\Http\Response
      */
-    public function destroy(annonces $annonces)
+    public function destroy(Annonces $annonces)
     {
         //
     }

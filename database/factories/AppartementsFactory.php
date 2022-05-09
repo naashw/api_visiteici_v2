@@ -32,7 +32,7 @@ class AppartementsFactory extends Factory
             'fibre_optique' => $this->faker->boolean(),
             'balcon' => $this->faker->boolean(),
             'terrasse' => $this->faker->boolean(),
-            'terasse_surface' => $this->faker->randomFloat(2, 10, 100),
+            'terasse_surface' => $this->faker->numberBetween(10, 100),
             'cave' => $this->faker->boolean(),
             'jardin' => $this->faker->boolean(),
             'jardin_surface' => $this->faker->randomFloat(2, 50, 1000),
