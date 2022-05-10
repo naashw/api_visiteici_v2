@@ -15,12 +15,8 @@ use Illuminate\Http\JsonResponse;
 
 class AnnoncesController extends Controller
 {
-    private AnnoncesRepositoryInterface $AnnoncesRepository;
-
-    public function __construct(AnnoncesRepositoryInterface $AnnoncesRepository) 
-    {
-        $this->AnnoncesRepository = $AnnoncesRepository;
-    }
+    public function __construct(private AnnoncesRepositoryInterface $AnnoncesRepository) 
+    {}
 
     /**
      * Display a listing of the resource.

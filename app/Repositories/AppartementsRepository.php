@@ -3,17 +3,12 @@
 namespace App\Repositories;
 
 use App\Http\Requests\StoreAppartementRequest;
-
 use App\Interfaces\AppartementsRepositoryInterface;
 use App\Models\Annonces;
 use App\Models\Appartements;
 use App\Models\Photos;
-use App\Models\User;
-use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Validator;
 
 class AppartementsRepository implements AppartementsRepositoryInterface
 {

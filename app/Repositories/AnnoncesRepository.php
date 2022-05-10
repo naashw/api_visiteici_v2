@@ -4,8 +4,6 @@ namespace App\Repositories;
 
 use App\Interfaces\AnnoncesRepositoryInterface;
 use App\Models\Annonces;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Collection as SupportCollection;
 use Illuminate\Support\Facades\DB;
 

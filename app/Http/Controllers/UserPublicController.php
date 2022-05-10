@@ -5,12 +5,14 @@ namespace App\Http\Controllers;
 use App\Models\UserPublic;
 use Illuminate\Http\Request;
 use App\Http\Requests\UpdateUserPublicRequest;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Auth;
+use App\Interfaces\UserPublicRepositoryInterface;
+
 
 class UserPublicController extends Controller
 {
+    public function __construct(private UserPublicRepositoryInterface $UserPublicRepository) 
+    {}
+
     /**
      * Display a listing of the resource.
      *
@@ -38,46 +40,10 @@ class UserPublicController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(UpdateUserPublicRequest $request)
-    {
-
-
-        if (!Auth::check()) {
-            return "Dommage, vous n'êtes pas connecté";
-        }
-
-        $fileUrl = null;
-        $file = $request['photo_public'];
-
-        if (isset($file)) {
-
-            $fileUploaded = Storage::disk('public')->put('photo', $file);
-            $fileUrl = Storage::url($fileUploaded);
-            $userPublic = UserPublic::updateOrCreate(
-                [
-                    'user_id' => Auth::id()
-                ],
-                [
-                    'photo_public' => asset($fileUrl),
-                ]
-            );
-        }
-
-        $userPublic = UserPublic::updateOrCreate(
-            [
-                'user_id' => Auth::id()
-            ],
-            [
-                'name_public' => $request['name_public'],
-                'email_public' => $request['email_public'],
-                'telephone_public' => $request['telephone_public'],
-                'ville_public' => $request['ville_public'],
-                'nom_societe_public' => $request['nom_societe_public'],
-                'url_website_societe_public' => $request['url_website_societe_public'],
-            ]
-        );
+    {     
 
         return response()->json([
-            'user' => $userPublic,
+            'user' =>   $this->UserPublicRepository->storeUserPublic($request),
             'state' => 'Profil public mis à jour avec succès',
         ]);
     }
@@ -91,20 +57,7 @@ class UserPublicController extends Controller
      */
     public function show($id)
     {
-        if (UserPublic::where('user_id', '=', $id)->exists()) {
-            $userPublic = UserPublic::where('user_id', '=', $id)->first();
-
-            return response()->json([
-                'user' => $userPublic,
-                'state' => 'Profil public trouvé',
-                'finded' => true,
-            ]);
-        } else {
-            return response()->json([
-                'state' => 'Profil public non trouvé',
-                'finded' => false,
-            ]);
-        }
+            return $this->UserPublicRepository->getUserById($id);
     }
 
     /**
