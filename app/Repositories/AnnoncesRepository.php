@@ -13,7 +13,7 @@ class AnnoncesRepository implements AnnoncesRepositoryInterface
 {
     public function getAllAnnonces()
     {
-      return Annonces::all();
+      return Annonces::latest();
     }
 
     public function getAnnoncesByParams($params): SupportCollection

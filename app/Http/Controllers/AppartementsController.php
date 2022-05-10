@@ -3,23 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Models\Appartements;
-use App\Models\Annonces;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreAppartementRequest;
 use App\Interfaces\AppartementsRepositoryInterface;
-use App\Models\Photos;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
+
 
 
 class AppartementsController extends Controller
 {
-    private AppartementsRepositoryInterface $AppartementsRepository;
-
-    public function __construct(AppartementsRepositoryInterface $AppartementsRepository)
-    {
-        $this->AppartementsRepository = $AppartementsRepository;
-    }
+    public function __construct(private AppartementsRepositoryInterface $AppartementsRepository)
+    {}
 
     /**
      * Display a listing of the resource.
@@ -29,7 +22,6 @@ class AppartementsController extends Controller
     public function index()
     {
         //
-        return appartements::all();
     }
 
     /**
@@ -49,8 +41,8 @@ class AppartementsController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(StoreAppartementRequest $request)
-    {
-        $AnnonceId = $this->AppartementsRepository->createAppartement($request, Auth::user());
+    {   
+        $AnnonceId = $this->AppartementsRepository->createAppartement($request);
         
         return response()->json([
             'id' => $AnnonceId,

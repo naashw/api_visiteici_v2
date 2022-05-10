@@ -8,6 +8,6 @@ use App\Models\User;
 interface AppartementsRepositoryInterface
 {
 
-    public function createAppartement(StoreAppartementRequest $request, User $user);
+    public function createAppartement(StoreAppartementRequest $request);
     
 }

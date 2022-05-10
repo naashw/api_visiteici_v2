@@ -10,15 +10,17 @@ use App\Models\Appartements;
 use App\Models\Photos;
 use App\Models\User;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class AppartementsRepository implements AppartementsRepositoryInterface
 {
-   public function createAppartement(StoreAppartementRequest $request, User $user): int
-   {
 
+   public function createAppartement(StoreAppartementRequest $request): int
+   {
+ 
       $appartements = Appartements::create([
          'categories' => $request['categories'],
          'nom' => $request['nom'],
@@ -47,7 +49,7 @@ class AppartementsRepository implements AppartementsRepositoryInterface
      ]);
      
      $annonce = Annonces::create([
-         'user_id' => $user->id,
+         'user_id' => Auth::id(),
          'biens_id' => $appartements->id,
          'biens_type' => $appartements->categories,
      ]);        
@@ -62,7 +64,7 @@ class AppartementsRepository implements AppartementsRepositoryInterface
              $url = Storage::url($fileUploaded);
              
              Photos::create([
-                 'user_id' => $user->id,
+                 'user_id' => Auth::id(),
                  'biens_id' => $appartements->id,
                  'annonces_id' => $annonce->id,
                  'photos' => asset($url),
