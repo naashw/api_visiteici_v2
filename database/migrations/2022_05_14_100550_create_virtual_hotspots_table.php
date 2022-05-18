@@ -17,10 +17,10 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
             $table->foreignId('virtual_room_id')->constrained();
-            $table->string('data_room');
-            $table->string('data_target_room');
-            $table->string('data_yaw');
-            $table->string('data_pitch');
+            $table->string('room');
+            $table->string('target_room');
+            $table->string('yaw');
+            $table->string('pitch');
         });
     }
 
