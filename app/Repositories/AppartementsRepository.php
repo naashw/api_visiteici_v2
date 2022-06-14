@@ -62,7 +62,7 @@ class AppartementsRepository implements AppartementsRepositoryInterface
                  'user_id' => Auth::id(),
                  'biens_id' => $appartements->id,
                  'annonces_id' => $annonce->id,
-                 'photos' => asset($url),
+                 'url' => asset($url),
              ]);
          }
      }
