@@ -16,7 +16,11 @@ class VirtualTourFactory extends Factory
      */
     public function definition()
     {
+        
         return [
+            'name' => $this->faker->unique()->regexify('[a-zA-Z0-9]{6}'),
+            'code' => $this->faker->unique()->regexify('[a-zA-Z0-9]{6}'),
         ];
+
     }
 }

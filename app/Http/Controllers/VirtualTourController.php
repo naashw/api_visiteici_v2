@@ -36,7 +36,7 @@ class VirtualTourController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        
     }
 
     /**
@@ -48,7 +48,7 @@ class VirtualTourController extends Controller
      */
     public function show($id)
     { 
-        $res = VirtualTour::where('id' , '=' , $id)->with('virtualroom', 'virtualroom.virtualHotspot')->get();
+        $res = VirtualTour::where('id' , '=' , $id)->with('virtualroom', 'virtualroom.virtualHotspot')->first();
         return response()->json($res);
     }
 

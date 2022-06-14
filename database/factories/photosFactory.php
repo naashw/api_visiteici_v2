@@ -33,7 +33,7 @@ class photosFactory extends Factory
         $url = Storage::url($path);
                
         return [
-            'photos' => asset($url),
+            'url' => asset($url),
         ];
     }
 }

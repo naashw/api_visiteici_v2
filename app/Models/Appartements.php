@@ -53,7 +53,7 @@ class Appartements extends Model
 
     ];
 
-    public function annonces ()
+    public function annonces()
     {
         return $this->belongsTo(Annonces::class);
     }

@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Interfaces\AnnoncesRepositoryInterface;
 use App\Models\Annonces;
+use App\Models\Appartements;
 use Illuminate\Support\Collection as SupportCollection;
 use Illuminate\Support\Facades\DB;
 
@@ -17,24 +18,9 @@ class AnnoncesRepository implements AnnoncesRepositoryInterface
     public function getAnnoncesByParams($params): SupportCollection
     {
         $nombresAnnoncesParPage = 25;
-        //On récupère les url des photos de la table photos
-        $photos = DB::table('photos')->select('biens_id', DB::raw("GROUP_CONCAT(photos) photos "))
-            ->groupBy('annonces_id');
 
-        // On récupère toutes les appartements de la table annonces
-        $appartements = DB::table('biens_appartements')->select('*', 'id as app_id');
-
-        // On join les appartements et les photos avec la table annonces
-        $annonces = DB::table('annonces')
-            ->leftJoinSub($appartements, 'biens_appartements', function ($join) {
-                $join->on('annonces.biens_id', '=', 'biens_appartements.app_id');
-            })
-            ->leftjoinSub($photos, 'photos', function ($join) {
-                $join->on('annonces.biens_id', '=', 'photos.biens_id');
-            })
-            ->select('photos.photos', 'biens_appartements.*', 'annonces.*')
-            ->orderBy('annonces.id', 'desc');
-
+        // Récuperer les annonces avec leurs relations enfants appartement et photos.
+        $annonces = Annonces::with('appartement', 'photos')->orderByDesc('id');
 
         //On filtre les annonces en fonction des critères de recherche si il y en à.
         isset($params["text"]) ? $annonces = $annonces->where('biens_appartements.nom', 'like', '%' . $params["text"] . '%') : '';
@@ -42,27 +28,13 @@ class AnnoncesRepository implements AnnoncesRepositoryInterface
         isset($params["page"]) ? $annonces = $annonces->skip($params["page"]*$nombresAnnoncesParPage) : '';
         isset($params["nb"]) ? $annonces = $annonces->take($params["nb"]) : $annonces = $annonces->take($nombresAnnoncesParPage);
 
-        $annonces = $annonces->get();
-
-        //On retourne les annonces à la vue
-        return $annonces;
+        return $annonces->get();
     }
 
-    public function getAnnonceById($id): SupportCollection
+    public function getAnnonceById($id)
     {
-        //On récupère les url des photos de la table photos
-        $photos = DB::table('photos')->select('biens_id', DB::raw("GROUP_CONCAT(photos) photos "))
-            ->groupBy('annonces_id');
-
-        //On récupère tous les annonces de la table annonces
-        $annonces = DB::table('annonces')
-            ->where('annonces.id', '=', $id)
-            ->leftJoin('biens_appartements', 'annonces.biens_id', '=', 'biens_appartements.id')
-            ->leftJoinSub($photos, 'photos', function ($join) {
-                $join->on('annonces.biens_id', '=', 'photos.biens_id');
-            })
-            ->get();
-
+      
+        $annonces = Annonces::where('id', '=', $id)->with('appartement', 'photos')->first();
         return $annonces;
 
     }

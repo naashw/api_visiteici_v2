@@ -12,6 +12,18 @@ class Photos extends Model
     protected $table = 'photos';
 
     /**
+     * The attributes that should be hidden for arrays.
+     */
+    protected $hidden = [
+        'id',
+        'created_at',
+        'updated_at',
+        'user_id',
+        'biens_id',
+        'annonces_id',
+    ];
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
@@ -20,7 +32,7 @@ class Photos extends Model
         'user_id',
         'biens_id',
         'annonces_id',
-        'photos',
+        'url',
     ];
 
     public function annonces ()
