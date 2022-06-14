@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
             $table->foreignId('virtual_tour_id')->constrained();
-            $table->string('room_name');
+            $table->string('name');
             $table->string('image');
         });
     }

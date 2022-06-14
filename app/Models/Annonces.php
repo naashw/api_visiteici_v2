@@ -10,6 +10,14 @@ class Annonces extends Model
     use HasFactory;
 
     /**
+     * The attributes that should be hidden for arrays.
+     */
+    protected $hidden = [
+        'updated_at',
+        'biens_id',
+    ];
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
@@ -27,7 +35,7 @@ class Annonces extends Model
 
     public function appartement()
     {
-        return $this->hasOne(Appartements::class, 'biens_id');
+        return $this->belongsTo(Appartements::class,'biens_id');
     }
 
     public function photos()

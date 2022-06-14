@@ -9,7 +9,16 @@ class VirtualTour extends Model
 {
     use HasFactory;
 
-   
+     /**
+     * The attributes that should be hidden for serialization.
+     *
+     * @var array<int, string>
+     */
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+        'user_id',
+    ];
 
     /**
      * The attributes that are mass assignable.
@@ -22,8 +31,8 @@ class VirtualTour extends Model
     ];
 
 
-    public function virtualroom()
+    public function virtualRoom()
     {
-        return $this->hasMany(virtualroom::class);
+        return $this->hasMany(virtualRoom::class);
     }
 }

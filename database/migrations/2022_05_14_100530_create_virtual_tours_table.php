@@ -16,7 +16,9 @@ return new class extends Migration
         Schema::create('virtual_tours', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->foreignId('user_id')->constrained();
+            $table->foreignId('user_id')->constrained()->nullable(); // nullable because the user can create the virtual tour without being logged in
+            $table->String("name")->unique(); // name of the virtual tour
+            $table->String("code")->unique(); // code of the virtual tour for access
         });
     }
 
