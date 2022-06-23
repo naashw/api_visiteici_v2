@@ -20,7 +20,7 @@ class UserPublicController extends Controller
      */
     public function index()
     {
-        return UserPublic::all();
+       
     }
 
     /**

@@ -53,4 +53,17 @@ class AccesAPITest extends TestCase
         
         $response->assertOk();
     }
+
+    /**
+     * A basic test example.
+     *
+     * @return void
+     */
+    public function test_can_access_api_virtualTourById()
+    {
+        $response = $this->get('/api/virtualTour/1');
+        
+        $response->assertOk();
+    }
+
 }

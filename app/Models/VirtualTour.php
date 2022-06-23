@@ -18,6 +18,7 @@ class VirtualTour extends Model
         'created_at',
         'updated_at',
         'user_id',
+        'code',
     ];
 
     /**
@@ -26,6 +27,8 @@ class VirtualTour extends Model
      * @var array<int, string>
      */
     protected $fillable = [
+        'name',
+        'code',
         'user_id',
         'appartement_id'
     ];

@@ -24,10 +24,9 @@ class StoreVirtualRoomRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'string|max:8',
-            'code' => 'string|max:8',
-            'picture' => 'array|max:30',
-            'picture.*' => 'image|mimes:jpeg,png,jpg|ratio:3/1',
+            'name' => 'nullable|string|max:8',
+            'code' => 'nullable|string|max:8',
+            'pictures' => 'image|mimes:jpeg,png,jpg|max:20000',
         ];
     }
 }

@@ -2,12 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreVirtualRoomRequest;
+use App\Interfaces\VirtualTourRepositoryInterface;
 use App\Models\VirtualTour;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class VirtualTourController extends Controller
 {
+
+    public function __construct(private VirtualTourRepositoryInterface $VirtualTourRepository)
+    {}
+
     /**
      * Display a listing of the resource.
      *
@@ -31,12 +36,18 @@ class VirtualTourController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\StoreVirtualRoomRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreVirtualRoomRequest $request)
     {
-        
+        //return response on json with virtualtourrepository
+        $response = $this->VirtualTourRepository->storeVirtualRoom($request);
+
+        return response()->json(
+            $response,
+            $response->status
+        );
     }
 
     /**
@@ -47,8 +58,8 @@ class VirtualTourController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show($id)
-    { 
-        $res = VirtualTour::where('id' , '=' , $id)->with('virtualroom', 'virtualroom.virtualHotspot')->first();
+    {
+        $res = VirtualTour::where('id', '=', $id)->with('virtualroom', 'virtualroom.virtualHotspot')->first();
         return response()->json($res);
     }
 
